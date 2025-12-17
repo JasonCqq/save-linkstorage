@@ -12,5 +12,10 @@
       "48": "favicon-3.png"
     }
   },
-  "permissions": ["scripting", "activeTab"]
+  "host_permissions": ["<all_urls>"],
+  "permissions": ["scripting", "tabs", "activeTab"],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  }
 }
