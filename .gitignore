@@ -1,0 +1,22 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies (if you use npm/build tools later)
+node_modules/
+package-lock.json
+
+# Build artifacts (if applicable)
+dist/
+build/
+
+# Extension packaging
+*.zip
+*.crx
+*.pem
