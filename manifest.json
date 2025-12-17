@@ -1,10 +1,16 @@
 {
-  "name": "Hello Extensions!",
-  "description": "Base Level Extension",
+  "name": "Save to Linkstorage",
+  "description": "Runs a script to save tabs into Linkstorage when the user clicks the action toolbar icon",
   "version": "1.0",
   "manifest_version": 3,
+  "icons": {},
   "action": {
-    "default_popup": "hello.html",
-    "default_icon": "hello_extensions.png"
-  }
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "favicon-1.png",
+      "32": "favicon-2.png",
+      "48": "favicon-3.png"
+    }
+  },
+  "permissions": ["scripting", "activeTab"]
 }
