@@ -4,19 +4,26 @@
   </head>
   <body>
     <nav id="header">
-      <p>linkstorag<span style="border-bottom: 3px solid #2e60cd">e</span></p>
+      <a href="https://linkstorage.net/" target="_blank"
+        >linkstorag<span style="border-bottom: 3px solid #2e60cd">e</span></a
+      >
 
       <button class="connect-acc">Connect Account</button>
     </nav>
     <div id="content">
-      <p>Must connect linkstorage account to use</p>
-
       <section id="tabs">
-        <button>Save Current Tab</button>
-
-        <p>Tabs</p>
-        <div>
+        <p class="label">Current Tabs</p>
+        <div class="tabs-grid">
           <p>Select all</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
+          <p>test.com</p>
           <p>test.com</p>
           <p>test.com</p>
           <p>test.com</p>
@@ -24,19 +31,42 @@
       </section>
 
       <section id="options">
-        <p>Dashboard</p>
-        <p>URL Bank</p>
-        <p>Bookmark</p>
-        <p>Folder</p>
+        <p class="label">Save Options</p>
+        <div class="options-grid">
+          <div>
+            <input type="checkbox" id="dashboard" name="dashboard" checked />
+            <label for="dashboard">Dashboard</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="urlbank" name="urlbank" checked />
+            <label for="urlbank">URLBank</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="bookmark" name="bookmark" checked />
+            <label for="bookmark">Bookmark</label>
+          </div>
+
+          <!-- <div>
+            <input type="checkbox" id="folder" name="folder" checked />
+            <label for="folder">Folder</label>
+          </div> -->
+        </div>
       </section>
 
-      <button>Save tabs</button>
+      <section id="buttonsFlex">
+        <button id="submitUrls">Save all the tabs!!!</button>
+        <button id="submitUrl">Save current tab</button>
+      </section>
     </div>
 
     <footer id="footer">
-      <p>Our Page</p>
+      <a href="https://linkstorage.net/" target="_blank">Our Page</a>
 
-      <p>Github</p>
+      <a href="https://github.com/JasonCqq/save-linkstorage" target="_blank"
+        >Github</a
+      >
     </footer>
 
     <script src="popup.js"></script>
