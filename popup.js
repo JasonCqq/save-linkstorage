@@ -1,7 +1,22 @@
+const ENV = {
+  DEV: "dev",
+  PROD: "prod",
+};
+
+const CURRENT_ENV =
+  chrome.runtime.getManifest().version_name === "dev" ? ENV.DEV : ENV.PROD;
+
+const backApiUrl =
+  CURRENT_ENV === ENV.DEV
+    ? "http://localhost:3000"
+    : "https://api.linkstorage.net";
+const frontApiUrl =
+  CURRENT_ENV === ENV.DEV ? "http://localhost:4200" : "https://linkstorage.net";
+
+  
 // Render current tabs
 async function displayAllTabs() {
-  const tabs = await chrome.tabs.query({});
-  console.log(tabs);
+  const tabs = await chrome.tabs.query({ currentWindow: true });
 
   const contentGrid = document.querySelector("#content #tabs .tabs-grid");
   contentGrid.innerHTML = tabs
@@ -24,13 +39,16 @@ async function displayUser() {
   if (user) {
     const connectAccount = document.getElementById("connectAcc");
     connectAccount.innerHTML = user.username;
+
+    chrome.action.setBadgeText({ text: "." });
+    chrome.action.setBadgeBackgroundColor({ color: "#00FF00" });
   }
 
   if (!user) {
     // Open auth page
     document.getElementById("connectAcc").addEventListener("click", () => {
       chrome.windows.create({
-        url: "http://localhost:4200/user/extension-login",
+        url: `${frontApiUrl}/user/extension-login`,
         type: "popup",
         width: 480,
         height: 600,
@@ -38,35 +56,122 @@ async function displayUser() {
     });
   }
 }
-
 displayUser();
-// document.getElementById("submitUrls").addEventListener("click", async () => {
-//   const tabs = await chrome.tabs.query({});
-//   console.log("Tabs: ", tabs);
-// });
 
-// document.getElementById("submitUrl").addEventListener("click", async () => {
-//   const [tab] = await chrome.tabs.query({
-//     active: true,
-//     lastFocusedWindow: true,
-//   });
-//   console.log("Current tab:", tab);
-//   console.log("URL:", tab.url);
-//   console.log("Title:", tab.title);
-// });
+const dashboardInput = document.getElementById("dashboard");
+const urlbankInput = document.getElementById("urlbank");
+const bookmarkInput = document.getElementById("bookmark");
+const resText = document.getElementById("resText");
 
-// Make authenticated requests
-// async function fetchUserData() {
-//   const { authToken } = await chrome.storage.local.get("authToken");
+document.getElementById("submitUrl").addEventListener("click", async () => {
+  resText.innerText = "Saving Link...";
+  resText.style.color = "#facc15";
 
-//   const response = await fetch(
-//     "http://localhost:3000/api/extension/user-data",
-//     {
-//       headers: {
-//         Authorization: `Bearer ${authToken}`,
-//       },
-//     }
-//   );
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true,
+  });
 
-//   return response.json();
-// }
+  const { authToken } = await chrome.storage.local.get("authToken");
+  const responses = [];
+  const dashboardValue = dashboardInput.checked;
+  const urlbankValue = urlbankInput.checked;
+  const bookmarkValue = bookmarkInput.checked;
+
+  if (urlbankValue === true) {
+    responses.push(
+      fetch(`${backApiUrl}/url/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ urls: [tab.url] }),
+      })
+    );
+  }
+
+  if (dashboardValue === true) {
+    responses.push(
+      fetch(`${backApiUrl}/link/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          urls: [tab.url],
+          bookmarked: bookmarkValue,
+        }),
+      })
+    );
+  }
+
+  const results = await Promise.all(responses);
+  const data = await Promise.all(results.map((r) => r.json()));
+
+  if (data) {
+    resText.style.color = "#90ee90";
+    resText.innerText = "Saved Link!";
+  }
+
+});
+
+document.getElementById("submitUrls").addEventListener("click", async () => {
+  const tabs = await chrome.tabs.query({ currentWindow: true });
+
+  resText.innerText = "Saving Link(s)... May take a while depending on amount.";
+  resText.style.color = "#facc15";
+
+  const { authToken } = await chrome.storage.local.get("authToken");
+  const responses = [];
+  const dashboardValue = dashboardInput.checked;
+  const urlbankValue = urlbankInput.checked;
+  const bookmarkValue = bookmarkInput.checked;
+
+  let tempArr = [];
+  tabs.map((t) => {
+    tempArr.push(t.url);
+  });
+
+  if (urlbankValue === true) {
+    responses.push(
+      fetch(`${backApiUrl}/url/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ urls: tempArr }),
+      })
+    );
+  }
+
+  if (dashboardValue === true) {
+    responses.push(
+      fetch(`${backApiUrl}/link/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          urls: tempArr,
+          bookmarked: bookmarkValue,
+        }),
+      })
+    );
+  }
+
+  const results = await Promise.all(responses);
+  const data = await Promise.all(results.map((r) => r.json()));
+
+  if (data) {
+    resText.style.color = "#90ee90";
+    resText.innerText = "Link(s) all saved!";
+  }
+});

@@ -13,17 +13,7 @@
     <div id="content">
       <section id="tabs">
         <p class="label">Current Tabs</p>
-        <div class="tabs-grid">
-          <p>Select all</p>
-          <!-- tab template
-         <div class="tab-item">
-            <img src="${tab.favIconUrl}" width="12" height="12">
-            <div class="tab-flex">
-                <span class="tab-title">${tab.title}</span>
-                <span class="tab-url">${tab.url}</span>
-            </div>
-        </div> -->
-        </div>
+        <div class="tabs-grid"></div>
       </section>
 
       <section id="options">
@@ -43,11 +33,6 @@
             <label for="bookmark">Bookmark</label>
             <input type="checkbox" id="bookmark" name="bookmark" />
           </div>
-
-          <!-- <div>
-            <input type="checkbox" id="folder" name="folder" checked />
-            <label for="folder">Folder</label>
-          </div> -->
         </div>
       </section>
 
@@ -55,6 +40,8 @@
         <button id="submitUrls">Save every tab</button>
         <button id="submitUrl">Save this tab</button>
       </section>
+
+      <p id="resText" style="color: greenyellow"></p>
     </div>
 
     <footer id="footer">

@@ -2,6 +2,7 @@
   "name": "Save to Linkstorage",
   "description": "Runs a script to save tabs into Linkstorage when the user clicks the action toolbar icon",
   "version": "1.0",
+  "version_name": "dev",
   "manifest_version": 3,
   "icons": {},
   "action": {
